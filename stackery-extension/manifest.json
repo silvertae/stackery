@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Stackery",
+  "description": "Scrap werbsites url",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "src/icons/_16.png",
+    "32": "src/icons/_32.png",
+    "48": "src/icons/_48.png",
+    "128": "src/icons/_128.png"
+  }
+}
