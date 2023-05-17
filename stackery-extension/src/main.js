@@ -3,19 +3,19 @@ const state = {
   selectMode: false,
   scraps: [
     {
-      title: '자바스크립트',
+      title: '카테고리1',
       items: [
-        { title: '브라우저 렌더링1', url: '~' },
-        { title: '브라우저 렌더링2', url: '~' },
-        { title: '브라우저 렌더링3', url: '~' }
+        { title: '스크랩 제목1', url: '~' },
+        { title: '스크랩 제목2', url: '~' },
+        { title: '스크랩 제목3', url: '~' }
       ]
     },
     {
-      title: '자바스크립트',
+      title: '카테고리2',
       items: [
-        { title: '브라우저 렌더링1', url: '~' },
-        { title: '브라우저 렌더링2', url: '~' },
-        { title: '브라우저 렌더링3', url: '~' }
+        { title: '스크랩 제목1', url: '~' },
+        { title: '스크랩 제목2', url: '~' },
+        { title: '스크랩 제목3', url: '~' }
       ]
     }
   ]
@@ -34,11 +34,11 @@ const getHeaderTemplate = (state) => {
 };
 
 const getContentBodyTemplate = (state) => `<section class="main__body">
-  ${createCategoriesTemplate(state.scraps)}
+  ${createCategoriesTemplate(state)}
 </section>`;
 
-const createCategoriesTemplate = (categories) =>
-  categories
+const createCategoriesTemplate = (state) =>
+  state.scraps
     .map(
       (category) => `
   <div class="scrap__category">
@@ -47,17 +47,27 @@ const createCategoriesTemplate = (categories) =>
       <button type="button" class="btn">접기</button>
     </header>
     <div class="category__container">
-      ${createItemsTemplate(category.items)}
+      ${createItemsTemplate(category.items, state.selectMode)}
     </div>
   </div>
 `
     )
     .join('');
 
-const createItemsTemplate = (items) =>
+const createItemsTemplate = (items, isSelectMode) =>
   items
-    .map((item) => `<div class="category__item">${item.title}</div>`)
+    .map(
+      (item) => `
+    <div class="item__wrapper d-flex">
+      <div class="category__item">${item.title}</div>
+      ${getSelectBoxForItem(isSelectMode)}
+    </div>
+    `
+    )
     .join('');
+
+const getSelectBoxForItem = (isSelectMode) =>
+  isSelectMode ? '<input class="form-check-input" type="checkbox" >' : '';
 
 const setEvent = () => {
   const moreButton = mainElement.querySelector('.main__more-button');
