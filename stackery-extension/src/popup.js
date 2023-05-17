@@ -1,3 +1,5 @@
+import './main.js';
+
 (() => {
   const forms = document.querySelectorAll('.needs-validation')
 
