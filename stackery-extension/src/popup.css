@@ -1,0 +1,9 @@
+body {
+  min-width: 360px;
+  min-height: 400px;
+}
+
+.category__title {
+  font-size: 15px;
+  line-height: 2;
+}

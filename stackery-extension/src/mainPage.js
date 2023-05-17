@@ -1,0 +1,42 @@
+export function initMain() {
+  render();
+  // setEvent();
+}
+
+const mainStore = {
+  categoryList: ['CS16', 'JS']
+};
+
+function render() {
+  const mainElement = document.querySelector('#main');
+
+  const mainTemplate = `
+    <header class="main__header d-flex justify-content-end">
+      <button type="button" class="btn"><i class="bi bi-three-dots"></i></button>
+    </header>
+    <section class="main__body">
+      ${mainStore.categoryList
+        .map((category) => makeCategory(category))
+        .join('')}
+    </section>
+  `;
+
+  mainElement.innerHTML = mainTemplate;
+}
+
+function makeCategory(category) {
+  const categoryTemplate = `
+    <div class="scrap__category mx-auto w-75 mt-3 border">
+      <header class="category__header d-flex justify-content-between">
+        <h3 class="category__title">${category}</h3>
+        <button type="button" class="btn--close border rounded-pill invisible">접기</button>
+      </header>
+      <div class="category__container w-100 d-flex flex-column align-items-center">
+        <div class="category__item border rounded bg-info">브라우저는 어떻게 동작하는가?</div>
+        <div class="category__item border rounded bg-info">NAVER D2</div>
+        <div class="category__item border rounded bg-info">네트워크 동작 원리</div>
+      </div>
+    </div>
+  `;
+  return categoryTemplate;
+}
