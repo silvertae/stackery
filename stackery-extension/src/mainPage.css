@@ -1,12 +1,24 @@
 .category__container {
+  height: 80px;
   position: relative;
   padding-top: 5px;
 }
 
+.category__container.spread {
+  height: auto;
+}
+
 .category__item {
+  width: 266px;
+  flex-shrink: 0;
   height: 50px;
   position: relative;
   transition: width 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+.category__item.spread {
+  pointer-events: auto;
 }
 
 .category__item:nth-of-type(1) {

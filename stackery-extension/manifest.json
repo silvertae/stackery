@@ -11,5 +11,6 @@
     "32": "src/icons/stack_32.png",
     "48": "src/icons/stack_48.png",
     "128": "src/icons/stack_128.png"
-  }
+  },
+  "permissions": ["tabs"]
 }
