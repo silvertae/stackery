@@ -4,10 +4,6 @@
   padding-top: 5px;
 }
 
-.category__container.spread {
-  height: auto;
-}
-
 .category__item {
   width: 266px;
   flex-shrink: 0;
@@ -19,6 +15,10 @@
 
 .category__item.spread {
   pointer-events: auto;
+}
+
+.category__item.invisible {
+  height: 0;
 }
 
 .category__item:nth-of-type(1) {

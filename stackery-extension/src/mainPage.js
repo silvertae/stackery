@@ -38,6 +38,9 @@ function makeCategory(category, idx) {
         <div class="category__item border rounded" style="background-color: ${categoryColor}" data-url="https://d2.naver.com/helloworld/59361">브라우저는 어떻게 동작하는가?</div>
         <div class="category__item border rounded" style="background-color: ${categoryColor}" data-url="https://d2.naver.com/helloworld">NAVER D2</div>
         <div class="category__item border rounded" style="background-color: ${categoryColor}" data-url="https://developer.mozilla.org/ko/docs/Learn/Common_questions/Web_mechanics/How_does_the_Internet_work">네트워크 동작 원리</div>
+        <div class="category__item border rounded invisible" style="background-color: ${categoryColor}" data-url="https://example.com">DUMMY</div>
+        <div class="category__item border rounded invisible" style="background-color: ${categoryColor}" data-url="https://example.com">DUMMY</div>
+        <div class="category__item border rounded invisible" style="background-color: ${categoryColor}" data-url="https://example.com">DUMMY</div>
       </div>
     </div>
   `;
@@ -57,7 +60,6 @@ function setEvent() {
   });
   items.forEach((item) => {
     item.addEventListener('click', () => {
-      console.log(item.className);
       chrome.tabs.create({ url: item.dataset.url });
     });
   });
@@ -71,6 +73,7 @@ function spreadItems(e) {
     .querySelector('.btn--close');
 
   let translatePx = 0;
+  let itemCount = 0;
 
   items.forEach((item) => {
     closeBtn.classList.remove('invisible');
@@ -78,10 +81,14 @@ function spreadItems(e) {
     item.classList.remove('invisible');
     item.classList.add('spread');
     item.style.width = '266px';
-    item.style.height = '50px';
     item.style.transform = `translateY(${translatePx}px)`;
+
     translatePx += 10;
+    itemCount += 1;
   });
+
+  const containerHeight = 50 * itemCount + translatePx;
+  container.style.height = `${containerHeight}px`;
 }
 
 function stackItems(e) {
@@ -93,7 +100,7 @@ function stackItems(e) {
   let width = 266;
   let translatePx = 0;
 
-  container.classList.remove('spread');
+  container.removeAttribute('style');
   items.forEach((item, idx) => {
     closeBtn.classList.add('invisible');
     if (idx >= 3) {
