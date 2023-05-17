@@ -5,17 +5,17 @@ const state = {
     {
       title: '카테고리1',
       items: [
-        { title: '스크랩 제목1', url: '~' },
-        { title: '스크랩 제목2', url: '~' },
-        { title: '스크랩 제목3', url: '~' }
+        { title: '스크랩 제목1', url: '~', checked: false },
+        { title: '스크랩 제목2', url: '~', checked: false },
+        { title: '스크랩 제목3', url: '~', checked: false }
       ]
     },
     {
       title: '카테고리2',
       items: [
-        { title: '스크랩 제목1', url: '~' },
-        { title: '스크랩 제목2', url: '~' },
-        { title: '스크랩 제목3', url: '~' }
+        { title: '스크랩 제목1', url: '~', checked: false },
+        { title: '스크랩 제목2', url: '~', checked: false },
+        { title: '스크랩 제목3', url: '~', checked: false }
       ]
     }
   ]
@@ -40,10 +40,10 @@ const getContentBodyTemplate = (state) => `<section class="main__body">
 const createCategoriesTemplate = (state) =>
   state.scraps
     .map(
-      (category) => `
-  <div class="scrap__category">
+      (category, index) => `
+  <div class="scrap__category" data-category-index="${index}">
     <header class="category__header d-flex justify-content-between">
-    <h3 class="category__title">${category.title}</h3>
+      <h3 class="category__title">${category.title}</h3>
       <button type="button" class="btn">접기</button>
     </header>
     <div class="category__container">
@@ -57,31 +57,49 @@ const createCategoriesTemplate = (state) =>
 const createItemsTemplate = (items, isSelectMode) =>
   items
     .map(
-      (item) => `
+      (item, index) => `
     <div class="item__wrapper d-flex">
-      <div class="category__item">${item.title}</div>
-      ${getSelectBoxForItem(isSelectMode)}
+      <div class="item__title">${item.title}</div>
+      ${getSelectBoxForItem(item.checked, isSelectMode, index)}
     </div>
     `
     )
     .join('');
 
-const getSelectBoxForItem = (isSelectMode) =>
-  isSelectMode ? '<input class="form-check-input" type="checkbox" >' : '';
+const getSelectBoxForItem = (checked, isSelectMode, index) =>
+  isSelectMode
+    ? `<input class="item__checkbox form-check-input" type="checkbox" ${
+        checked ? 'checked' : ''
+      } data-item-index="${index}" >`
+    : '';
 
 const setEvent = () => {
   const moreButton = mainElement.querySelector('.main__more-button');
   if (moreButton) {
     moreButton.addEventListener('click', turnOnSelectMode);
   }
-
   const cancleButton = mainElement.querySelector('.main__cancle-button');
   if (cancleButton) {
     cancleButton.addEventListener('click', turnOffSelectMode);
   }
   const completeButton = mainElement.querySelector('.main__complete-button');
   if (completeButton) {
-    completeButton.addEventListener('click', turnOffSelectMode);
+    completeButton.addEventListener('click', completeSelectMode);
+  }
+  const categories = mainElement.querySelectorAll('.scrap__category');
+  if (categories) {
+    categories.forEach((category) => {
+      category.addEventListener('click', (event) => {
+        const checkbox = event.target.closest('.item__checkbox');
+        if (checkbox === null) {
+          event.stopPropagation();
+          return;
+        }
+        const categoryIndex = category.dataset.categoryIndex;
+        const itemIndex = checkbox.dataset.itemIndex;
+        changeCheckedForItem(categoryIndex, itemIndex);
+      });
+    });
   }
 };
 
@@ -100,5 +118,19 @@ const turnOffSelectMode = () => {
   state.selectMode = false;
   render();
 };
+
+const completeSelectMode = () => {
+  const selectedItems = [];
+  state.scraps.forEach((scrap) => {
+    selectedItems.push(...scrap.items.filter((item) => item.checked));
+  })
+  turnOffSelectMode();
+}
+
+const changeCheckedForItem = (categoryIndex, itemIndex) => {
+  const item = state.scraps[categoryIndex].items[itemIndex];
+  state.scraps[categoryIndex].items[itemIndex].checked = !item.checked;
+  render();
+}
 
 render();
