@@ -1,0 +1,66 @@
+#form {
+  width: 300px;
+  height: 150px;
+  background-color: dimgray;
+  position: relative;
+}
+.save__header__logo {
+  padding: 5px 0px 0px 15px;
+  font-weight: bold;
+  font-size: 15px;
+}
+.save__title {
+  font-weight: 700;
+  font-size: 13px;
+  width: 220px;
+  height: 30px;
+  display: flex;
+  margin-top: 15px;
+}
+.title__label {
+  height: 20px;
+  margin-right: 25px;
+  padding: 3px 0px 0px 20px;
+}
+.title__input {
+  font-size: 12px;
+  width: 190px;
+  height: 25px;
+  padding: none;
+  border: solid 1px;
+  border-radius: 10px;
+}
+.save__category {
+  font-weight: 700;
+  font-size: 13px;
+  width: 220px;
+  height: 30px;
+  display: flex;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.category__label {
+  height: 20px;
+  margin-right: 11px;
+}
+.category__input {
+  font-size: 12px;
+  width: 190px;
+  height: 25px;
+  padding: none;
+  border: solid 1px;
+  border-radius: 10px;
+}
+.save__btn {
+  font-size: 10px;
+  width: 40px;
+  height: 25px;
+  font-weight: 700;
+  background-color: lightgreen;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: none;
+  border-radius: 15px;
+  border: none;
+}
