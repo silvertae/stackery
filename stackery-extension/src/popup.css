@@ -11,3 +11,16 @@ body {
   font-size: 15px;
   line-height: 2;
 }
+
+.main__more-button {
+  border-radius: 100%;
+  border: none;
+}
+
+.main__more-button.show {
+  background-color: rgba(64, 64, 64, 0.2);
+}
+
+.dropdown-toggle::after {
+  content: none;
+}
