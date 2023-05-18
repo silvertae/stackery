@@ -10,21 +10,15 @@ const mainStore = {
 const categoryColors = ['#edede9', '#d6ccc2', '#f5ebe0', '#e3d5ca', '3d5bdaf'];
 
 function render() {
-  const mainElement = document.querySelector('#main');
+  const mainBody = document.querySelector('.main__body');
 
   const mainTemplate = `
-    <div>
-      <section class="scrap__body d-none">
-      </section>
-      <section class="main__body">
-        ${mainStore.categoryList
-          .map((category, idx) => makeCategory(category, idx))
-          .join('')}
-      </section>
-    </div>
+      ${mainStore.categoryList
+        .map((category, idx) => makeCategory(category, idx))
+        .join('')}
   `;
 
-  mainElement.innerHTML = mainTemplate;
+  mainBody.innerHTML = mainTemplate;
 }
 
 function makeCategory(category, idx) {

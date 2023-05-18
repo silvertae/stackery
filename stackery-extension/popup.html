@@ -16,23 +16,27 @@
   </head>
   <body>
     <div id="popup">
-      <header class="bg-primary-subtle">
+      <header class="bg-primary-subtle d-flex fs-2">
+        <i class="bi bi-stack"></i>
         <div class="h1">Stackery</div>
       </header>
       <div class="nav nav-tabs justify-content-between">
         <div class="nav-item__wrapper d-flex">
           <div class="nav-item">
-            <div class="nav-link disabled">Scrap</div>
+            <div class="nav-link scrap__tab">Scrap</div>
           </div>
           <div class="nav-item">
-            <div class="nav-link active">Main</div>
+            <div class="nav-link main__tab active">Main</div>
           </div>
         </div>
         <button type="button" class="btn btn--more">
           <i class="bi bi-three-dots"></i>
         </button>
       </div>
-      <div id="main"></div>
+      <div id="main">
+        <section class="scrap__body d-none"></section>
+        <section class="main__body"></section>
+      </div>
     </div>
     <script src="src/bootstrap.min.js"></script>
     <script src="src/popup.js" type="module"></script>
