@@ -1,4 +1,4 @@
-async function fetchAllData() {
+export async function fetchAllData() {
   const scraps = await chrome.storage.local.get(null);
   return classifyByCategory(Object.values(scraps));
 }
@@ -16,13 +16,12 @@ function classifyByCategory(items) {
 }
 
 export function saveData(obj) {
-  const id = generateUniqueId();
-  obj.id = id;
+  const generatedId = generateUniqueId();
+  obj.id = generatedId;
 
-  chrome.storage.local.set({ id: obj }).then(async () => {
-    const data = await fetchAllData();
-    console.log(data);
-  });
+  const storageObj = {};
+  storageObj[generatedId] = obj;
+  chrome.storage.local.set(storageObj);
 }
 
 function generateUniqueId() {
@@ -37,6 +36,7 @@ export async function findDataByUrl(url) {
   return Object.values(scraps).find((scrap) => scrap.url === url) ?? null;
 }
 
-async function removeDataByIds(ids) {
+export async function removeDataByIds(ids) {
+  console.log(ids);
   await chrome.storage.local.remove(ids);
 }

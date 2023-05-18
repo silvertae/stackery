@@ -1,80 +1,26 @@
-export function initMain() {
-  render();
-  setEvent();
+import { fetchAllData, removeDataByIds } from './dataFetcher.js';
+
+export async function initMain() {
+  await updateMainView();
 }
 
 const state = {
   selectMode: false,
   selectionPurpose: '',
-  scraps: [
-    {
-      title: '카테고리1',
-      items: [
-        {
-          id: 1,
-          title: 'Start Bootstrap',
-          url: 'https://getbootstrap.com/docs/5.3/getting-started/introduction/',
-          checked: false
-        },
-        {
-          id: 2,
-          title: 'Chrome.storage API',
-          url: 'https://developer.chrome.com/docs/extensions/reference/storage/',
-          checked: false
-        },
-        {
-          id: 3,
-          title: 'Youtube music',
-          url: 'https://www.youtube.com/watch?v=sMivc3RIrFs',
-          checked: false
-        },
-        {
-          id: 4,
-          title: '4',
-          url: 'https://www.youtube.com/watch?v=sMivc3RIrFs',
-          checked: false
-        },
-        {
-          id: 5,
-          title: '5',
-          url: 'https://www.youtube.com/watch?v=sMivc3RIrFs',
-          checked: false
-        },
-        {
-          id: 6,
-          title: '6',
-          url: 'https://www.youtube.com/watch?v=sMivc3RIrFs',
-          checked: false
-        }
-      ]
-    },
-    {
-      title: '카테고리2',
-      items: [
-        {
-          id: 7,
-          title: '스크랩 제목1',
-          url: 'https://developer.mozilla.org/ko/docs/Web/API/Event/bubbles',
-          checked: false
-        },
-        {
-          id: 8,
-          title: '스크랩 제목2',
-          url: 'https://www.naver.com/',
-          checked: false
-        },
-        {
-          id: 9,
-          title: '스크랩 제목3',
-          url: 'https://www.google.com/',
-          checked: false
-        }
-      ]
-    }
-  ]
+  scraps: []
 };
 
 const categoryColors = ['#edede9', '#d6ccc2', '#f5ebe0', '#e3d5ca', '3d5bdaf'];
+
+async function updateMainView() {
+  await fetchData();
+  render();
+  setEvent();
+}
+
+async function fetchData() {
+  state.scraps = await fetchAllData();
+}
 
 function render() {
   const mainBody = document.querySelector('.main__body');
@@ -121,7 +67,7 @@ function createFooterTemplate() {
 function createItemsTemplate(items, categoryColor) {
   return items
     .map((item, index) => {
-      const faviconUrl = new URL('/favicon.ico', item.url).href;
+      // const faviconUrl = new URL('/favicon.ico', item.url).href;
       const visibility = index > 2 ? 'invisible' : '';
       const checked = item.checked ? 'checked' : '';
 
@@ -129,7 +75,6 @@ function createItemsTemplate(items, categoryColor) {
         <div class="category__item border rounded d-flex align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
         data-url="${item.url}"
         data-item-index="${index}">
-          <img class="favicon-img" src="${faviconUrl}" alt="" />
           <p class="item__title mx-1 mb-0 flex-grow-1">${item.title}</p>
           <input class="item__checkbox form-check-input mt-0 d-none" type="checkbox" ${checked} />
         </div>
@@ -310,7 +255,7 @@ const completeSelectMode = (visibleElements) => {
   turnOffSelectMode(visibleElements);
 };
 
-const handleSelectedItemsWithPurpose = (selectedItems) => {
+const handleSelectedItemsWithPurpose = async (selectedItems) => {
   switch (state.selectionPurpose) {
     case 'copy':
       navigator.clipboard.writeText(
@@ -319,11 +264,8 @@ const handleSelectedItemsWithPurpose = (selectedItems) => {
       break;
     case 'remove':
       const itemIds = selectedItems.map((selectedItem) => selectedItem.id);
-      state.scraps = state.scraps.map((scrap) => {
-        scrap.items = scrap.items.filter((item) => !itemIds.includes(item.id));
-        return scrap;
-      });
-      reRender();
+      await removeDataByIds(itemIds);
+      await updateMainView();
       break;
     case 'open':
       selectedItems.forEach((selectedItem) => {
@@ -348,8 +290,3 @@ const changeCheckedForItem = (categoryIndex, itemIndex) => {
   const item = state.scraps[categoryIndex].items[itemIndex];
   state.scraps[categoryIndex].items[itemIndex].checked = !item.checked;
 };
-
-function reRender() {
-  render();
-  setEvent();
-}
