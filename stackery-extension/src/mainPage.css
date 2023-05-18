@@ -1,3 +1,11 @@
+.main__body {
+  height: 100%;
+}
+
+.category__wrapper {
+  padding-bottom: 38px;
+}
+
 .category__container {
   height: 80px;
   position: relative;
@@ -36,4 +44,11 @@
   z-index: 1;
   width: 246px;
   transform: translateY(-80px);
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
 }

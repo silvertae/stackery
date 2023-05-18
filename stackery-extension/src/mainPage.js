@@ -79,12 +79,16 @@ function render() {
   const mainBody = document.querySelector('.main__body');
 
   const mainTemplate = `
+  <div class="category__wrapper">
       ${state.scraps
         .map((category, idx) => makeCategory(category, idx))
         .join('')}
+  </div>
   `;
 
-  mainBody.innerHTML = mainTemplate;
+  const footerTemplate = createFooterTemplate();
+
+  mainBody.innerHTML = mainTemplate + footerTemplate;
 }
 
 function makeCategory(category, idx) {
@@ -102,6 +106,16 @@ function makeCategory(category, idx) {
     </div>
   `;
   return categoryTemplate;
+}
+
+function createFooterTemplate() {
+  if (state.selectMode) {
+    return `<footer class="d-flex justify-content-between bg-primary-subtle">
+      <button type="button" class="main__cancle-button btn"><i class="bi bi-x-lg"></i></button>
+      <button type="button" class="main__complete-button btn"><i class="bi bi-check-lg"></i></button>
+    </footer>`;
+  }
+  return ``;
 }
 
 function createItemsTemplate(items, isSelectMode, categoryColor) {
@@ -276,7 +290,7 @@ const handleSelectedItemsWithPurpose = (selectedItems) => {
     case 'remove':
       const itemIds = selectedItems.map((selectedItem) => selectedItem.id);
       state.scraps = state.scraps.map((scrap) => {
-        scrap.items = scrap.items.filter((item) => itemIds.includes(item.id));
+        scrap.items = scrap.items.filter((item) => !itemIds.includes(item.id));
         return scrap;
       });
       break;
