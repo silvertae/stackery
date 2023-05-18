@@ -1,15 +1,5 @@
-body {
-  min-width: 360px;
-  min-height: 600px;
-}
-
 .h1 {
   margin-bottom: 0;
-}
-
-.category__title {
-  font-size: 15px;
-  line-height: 2;
 }
 
 .main__more-button {

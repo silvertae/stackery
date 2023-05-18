@@ -17,20 +17,20 @@
   </head>
   <body>
     <div id="popup">
-      <header class="bg-primary-subtle d-flex fs-2">
+      <header class="header__logo bg-primary-subtle d-flex fs-2 p-2">
         <i class="bi bi-stack"></i>
-        <div class="h1">Stackery</div>
+        <h1 class="h1 mx-1">Stackery</h1>
       </header>
       <div class="nav nav-tabs justify-content-between">
         <div class="nav-item__wrapper d-flex">
           <div class="nav-item">
-            <div class="nav-link scrap__tab">Scrap</div>
+            <div class="nav-link scrap__tab active">Scrap</div>
           </div>
           <div class="nav-item">
-            <div class="nav-link main__tab active">Main</div>
+            <div class="nav-link main__tab">Main</div>
           </div>
         </div>
-        <div class="dropdown btn--more">
+        <div class="dropdown btn--more d-none">
           <button
             type="button"
             class="main__more-button btn dropdown-toggle"
@@ -53,39 +53,51 @@
         </div>
       </div>
       <main>
-        <section class="scrap__body d-none">
+        <section class="scrap__body">
           <div id="form">
-            <div class="form__save__header">
-              <div class="save__header__logo">Stackery</div>
-            </div>
-            <div class="form__main">
-              <div class="save__title">
-                <span class="title__label">Title</span>
+            <form
+              class="form__main d-flex flex-column needs-validation"
+              novalidate
+            >
+              <div class="w-75 mt-2 mx-auto">
+                <label for="validationCustom01" class="form-label fw-bold"
+                  >Title</label
+                >
                 <input
                   type="text"
-                  class="title__input form-control"
-                  id="title__input"
-                  placeholder="Title"
+                  class="form-control input__title bg-secondary-subtle"
+                  id="validationCustom01"
+                  value=""
+                  required
                 />
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please fill title.</div>
               </div>
-              <div class="save__category">
-                <span class="category__label">Category</span>
+              <div class="w-75 mt-2 mx-auto">
+                <label for="validationCustom02" class="form-label fw-bold"
+                  >Category</label
+                >
                 <input
                   type="text"
-                  class="category__input form-control"
-                  id="category__input"
-                  placeholder="Category"
+                  class="form-control input__category bg-secondary-subtle"
+                  id="validationCustom02"
+                  value=""
+                  required
                 />
+                <div class="valid-feedback">Looks good!</div>
+                <div class="invalid-feedback">Please fill category.</div>
               </div>
-              <div class="main__btn">
-                <button type="button" class="save__btn" id="save__btn">
-                  저장
-                </button>
-              </div>
-            </div>
+              <button
+                type="submit"
+                class="btn btn-primary save__btn m-3 align-self-end"
+                id="save__btn"
+              >
+                저장
+              </button>
+            </form>
           </div>
         </section>
-        <section class="main__body"></section>
+        <section class="main__body d-none"></section>
       </main>
     </div>
     <script src="src/js/bootstrap.bundle.min.js"></script>
