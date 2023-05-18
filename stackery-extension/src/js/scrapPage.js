@@ -1,4 +1,6 @@
-async function getTabUrl() {
+import { saveData } from './dataFetcher.js';
+
+export async function getTabUrl() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   const { url } = tab;
   return url;
@@ -27,7 +29,7 @@ async function getH1() {
 async function writeTitle() {
   const h1Tags = await getH1();
   const url = await getTabUrl();
-  const titleInput = document.querySelector('#title__input');
+  const titleInput = document.querySelector('.input__title');
   if (h1Tags === null) {
     titleInput.value = url;
   } else {
@@ -35,19 +37,43 @@ async function writeTitle() {
   }
 }
 
-async function saveData() {
+function saveScrapData() {
   const saveBtn = document.querySelector('.save__btn');
-  saveBtn.addEventListener('click', (e) => {
-    const categoryInput = document.querySelector('.category__input');
+  saveBtn.addEventListener('click', async () => {
+    const categoryInput = document.querySelector('.input__category');
     const categoryText = categoryInput.value;
-    const key1 = '1';
-    chrome.storage.local.set({ key1: categoryText }).then(() => {});
+    const h1Tags = await getH1();
+    const scrapUrl = await getTabUrl();
+    const scrapObj = {
+      title: h1Tags,
+      url: scrapUrl,
+      category: categoryText
+    };
+    saveData(scrapObj);
   });
 }
 
-async function init() {
-  writeTitle();
-  saveData();
+function validateForm() {
+  const forms = document.querySelectorAll('.needs-validation');
+
+  Array.from(forms).forEach((form) => {
+    form.addEventListener(
+      'submit',
+      (event) => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        form.classList.add('was-validated');
+      },
+      false
+    );
+  });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+export async function initScrapPage() {
+  await writeTitle();
+  saveScrapData();
+  validateForm();
+}

@@ -1,5 +1,21 @@
-export function initNavTab() {
+import { findDataByUrl } from './dataFetcher.js';
+import { getTabUrl } from './scrapPage.js';
+
+export async function initNavTab() {
+  await showFirstPage();
   setEvent();
+}
+
+async function showFirstPage() {
+  const currentUrl = await getTabUrl();
+  const currentPage = await findDataByUrl(currentUrl);
+
+  if (currentPage === null) {
+    showScrapPage();
+    return;
+  }
+  disableScrapPage();
+  showMainPage();
 }
 
 function setEvent() {
@@ -36,4 +52,10 @@ function showMainPage() {
   scrapPage.classList.add('d-none');
   mainPage.classList.remove('d-none');
   btnMore.classList.remove('d-none');
+}
+
+function disableScrapPage() {
+  const scrapTab = document.querySelector('.scrap__tab');
+
+  scrapTab.classList.add('disabled');
 }

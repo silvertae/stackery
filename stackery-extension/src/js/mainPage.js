@@ -98,7 +98,7 @@ function makeCategory(category, idx) {
   const categoryTemplate = `
     <div class="scrap__category mx-auto w-75 mt-3" data-category-index="${idx}">
       <header class="category__header d-flex justify-content-between">
-        <h3 class="category__title">${category.title}</h3>
+        <h3 class="category__title fs-5">${category.title}</h3>
         <button type="button" class="btn--close border rounded-pill invisible">접기</button>
       </header>
       <div class="category__container w-100 d-flex flex-column align-items-center" data-category-index="${idx}">
