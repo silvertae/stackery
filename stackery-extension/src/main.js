@@ -7,19 +7,19 @@ const state = {
       items: [
         {
           id: 1,
-          title: '스크랩 제목1',
+          title: 'Start Bootstrap',
           url: 'https://getbootstrap.com/docs/5.3/getting-started/introduction/',
           checked: false
         },
         {
           id: 2,
-          title: '스크랩 제목2',
+          title: 'Chrome.storage API',
           url: 'https://developer.chrome.com/docs/extensions/reference/storage/',
           checked: false
         },
         {
           id: 3,
-          title: '스크랩 제목3',
+          title: 'Youtube music',
           url: 'https://www.youtube.com/watch?v=sMivc3RIrFs',
           checked: false
         }

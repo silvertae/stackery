@@ -29,14 +29,35 @@
             <div class="nav-link main__tab active">Main</div>
           </div>
         </div>
-        <button type="button" class="btn btn--more">
+        <!-- <button type="button" class="btn btn--more">
           <i class="bi bi-three-dots"></i>
-        </button>
+        </button> -->
+        <div class="dropdown">
+          <button
+            type="button"
+            class="main__more-button btn dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li class="dropdown-item" data-purpose="share">
+              <a class="dropdown-item" href="#">공유하기</a>
+            </li>
+            <li class="dropdown-item" data-purpose="remove">
+              <a class="dropdown-item" href="#">삭제하기</a>
+            </li>
+            <li class="dropdown-item" data-purpose="open">
+              <a class="dropdown-item" href="#">모두 열기</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div id="main">
+      <main>
         <section class="scrap__body d-none"></section>
         <section class="main__body"></section>
-      </div>
+      </main>
     </div>
     <script src="src/bootstrap.bundle.min.js"></script>
     <script src="src/popup.js" type="module"></script>
