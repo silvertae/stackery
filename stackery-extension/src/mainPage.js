@@ -1,5 +1,6 @@
 export function initMain() {
   render();
+  setEvent();
 }
 
 const state = {
@@ -84,7 +85,6 @@ function render() {
   `;
 
   mainBody.innerHTML = mainTemplate;
-  setEvent();
 }
 
 function makeCategory(category, idx) {
@@ -183,6 +183,11 @@ function setEvent() {
         const { categoryIndex } = category.dataset;
         const { itemIndex } = item.dataset;
         changeCheckedForItem(categoryIndex, itemIndex);
+        const checkbox = item.querySelector('.item__checkbox');
+        if (event.target === checkbox) {
+          return;
+        }
+        checkbox.checked = !checkbox.checked;
       });
     });
   }
@@ -239,12 +244,14 @@ function stackItems(e) {
 const turnOnSelectMode = () => {
   state.selectMode = true;
   render();
+  setEvent();
 };
 
 const turnOffSelectMode = () => {
   state.selectMode = false;
   resetSelectionStates();
   render();
+  setEvent();
 };
 
 const setSelectionPurpose = (purpose) => {
@@ -296,5 +303,4 @@ const resetSelectionStates = () => {
 const changeCheckedForItem = (categoryIndex, itemIndex) => {
   const item = state.scraps[categoryIndex].items[itemIndex];
   state.scraps[categoryIndex].items[itemIndex].checked = !item.checked;
-  render();
 };
