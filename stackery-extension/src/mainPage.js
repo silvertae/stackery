@@ -94,7 +94,7 @@ function makeCategory(category, idx) {
     <div class="scrap__category mx-auto w-75 mt-3" data-category-index="${idx}">
       <header class="category__header d-flex justify-content-between">
         <h3 class="category__title">${category.title}</h3>
-        <button type="button" class="btn--close border rounded-pill">접기</button>
+        <button type="button" class="btn--close border rounded-pill invisible">접기</button>
       </header>
       <div class="category__container w-100 d-flex flex-column align-items-center" data-category-index="${idx}">
         ${createItemsTemplate(category.items, state.selectMode, categoryColor)}
