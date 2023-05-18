@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stackery extension</title>
-  <link href="src/bootstrap.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="src/normalize.css">
-  <link rel="stylesheet" href="src/popup.css">
-</head>
-<body>
-  <div id="root">
-    <div id="form"></div>
-    <div id="main"></div>
-  </div>
-  <script src="src/bootstrap.min.js"></script>
-  <script src="src/popup.js" type="module"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stackery extension</title>
+    <link href="src/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="src/normalize.css" />
+    <link rel="stylesheet" href="src/popup.css" />
+    <link rel="stylesheet" href="src/mainPage.css" />
+  </head>
+  <body>
+    <div id="popup">
+      <header class="bg-primary-subtle d-flex fs-2">
+        <i class="bi bi-stack"></i>
+        <div class="h1">Stackery</div>
+      </header>
+      <div class="nav nav-tabs justify-content-between">
+        <div class="nav-item__wrapper d-flex">
+          <div class="nav-item">
+            <div class="nav-link scrap__tab">Scrap</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-link main__tab active">Main</div>
+          </div>
+        </div>
+        <button type="button" class="btn btn--more">
+          <i class="bi bi-three-dots"></i>
+        </button>
+      </div>
+      <div id="main">
+        <section class="scrap__body d-none"></section>
+        <section class="main__body"></section>
+      </div>
+    </div>
+    <script src="src/bootstrap.min.js"></script>
+    <script src="src/popup.js" type="module"></script>
+  </body>
 </html>

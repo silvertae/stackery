@@ -1,14 +1,5 @@
-(() => {
-  const forms = document.querySelectorAll('.needs-validation')
+import { initMain } from './mainPage.js';
+import { initNavTab } from './navTab.js';
 
-  Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-
-      form.classList.add('was-validated')
-    }, false)
-  })
-})()
+initNavTab();
+initMain();
