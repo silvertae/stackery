@@ -5,6 +5,7 @@ export function initMain() {
 
 const state = {
   selectMode: false,
+  selectionPurpose: '',
   scraps: [
     {
       title: '카테고리1',
@@ -79,11 +80,11 @@ function render() {
   const mainBody = document.querySelector('.main__body');
 
   const mainTemplate = `
-  <div class="category__wrapper">
+    <div class="category__wrapper">
       ${state.scraps
         .map((category, idx) => makeCategory(category, idx))
         .join('')}
-  </div>
+    </div>
   `;
 
   const footerTemplate = createFooterTemplate();
@@ -101,7 +102,7 @@ function makeCategory(category, idx) {
         <button type="button" class="btn--close border rounded-pill invisible">접기</button>
       </header>
       <div class="category__container w-100 d-flex flex-column align-items-center" data-category-index="${idx}">
-        ${createItemsTemplate(category.items, state.selectMode, categoryColor)}
+        ${createItemsTemplate(category.items, categoryColor)}
       </div>
     </div>
   `;
@@ -109,51 +110,45 @@ function makeCategory(category, idx) {
 }
 
 function createFooterTemplate() {
-  if (state.selectMode) {
-    return `<footer class="d-flex justify-content-between bg-primary-subtle">
+  return `
+    <footer class="main__footer d-flex justify-content-between bg-primary-subtle d-none">
       <button type="button" class="main__cancle-button btn"><i class="bi bi-x-lg"></i></button>
+      <h3 class="main__footer--state"></h3>
       <button type="button" class="main__complete-button btn"><i class="bi bi-check-lg"></i></button>
     </footer>`;
-  }
-  return ``;
 }
 
-function createItemsTemplate(items, isSelectMode, categoryColor) {
+function createItemsTemplate(items, categoryColor) {
   return items
     .map((item, index) => {
       const faviconUrl = new URL('/favicon.ico', item.url).href;
       const visibility = index > 2 ? 'invisible' : '';
+      const checked = item.checked ? 'checked' : '';
 
       return `
         <div class="category__item border rounded d-flex align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
         data-url="${item.url}"
         data-item-index="${index}">
-          <img class="favicon-img" src="${faviconUrl}" alt="favicon">
+          <img class="favicon-img" src="${faviconUrl}" alt="" />
           <p class="item__title mx-1 mb-0 flex-grow-1">${item.title}</p>
-          ${getSelectBoxForItem(item.checked, isSelectMode)}
+          <input class="item__checkbox form-check-input mt-0 d-none" type="checkbox" ${checked} />
         </div>
         `;
     })
     .join('');
 }
 
-function getSelectBoxForItem(checked, isSelectMode) {
-  return isSelectMode
-    ? `<input class="item__checkbox form-check-input mt-0" type="checkbox" ${
-        checked ? 'checked' : ''
-      } >`
-    : '';
-}
-
 function setEvent() {
   const categoryContainers = document.querySelectorAll('.category__container');
   const closeBtn = document.querySelectorAll('.btn--close');
   const items = document.querySelectorAll('.category__item');
-  const dropdownItems = document.querySelectorAll('.dropdown-item');
+  const dropdownMenu = document.querySelector('.dropdown-menu');
   const cancleButton = document.querySelector('.main__cancle-button');
   const completeButton = document.querySelector('.main__complete-button');
   const categories = document.querySelectorAll('.scrap__category');
-  const checkBoxes = document.querySelectorAll('.item__checkbox');
+  const footer = document.querySelector('.main__footer');
+  const footerState = document.querySelector('.main__footer--state');
+  const checkboxes = document.querySelectorAll('.item__checkbox');
 
   categoryContainers.forEach((container) => {
     container.addEventListener('click', spreadItems);
@@ -163,51 +158,41 @@ function setEvent() {
     btn.addEventListener('click', stackItems);
   });
 
-  if (!state.selectMode) {
-    items.forEach((item) => {
-      item.addEventListener('click', () => {
-        chrome.tabs.create({ url: item.dataset.url });
-      });
+  items.forEach((item) => {
+    item.addEventListener('click', openUrl.bind(this, item.dataset.url));
+  });
+
+  dropdownMenu.addEventListener('click', (event) => {
+    turnOnSelectModeWithPurpose(event, { footer, checkboxes, footerState });
+  });
+
+  cancleButton.addEventListener(
+    'click',
+    turnOffSelectMode.bind(this, [footer, ...checkboxes])
+  );
+
+  completeButton.addEventListener(
+    'click',
+    completeSelectMode.bind(this, [footer, ...checkboxes])
+  );
+
+  categories.forEach((category) => {
+    category.addEventListener('click', (event) => {
+      const item = event.target.closest('.category__item');
+      if (item === null) {
+        event.stopPropagation();
+        return;
+      }
+      const { categoryIndex } = category.dataset;
+      const { itemIndex } = item.dataset;
+      changeCheckedForItem(categoryIndex, itemIndex);
+      const itemCheckBox = item.querySelector('.item__checkbox');
+      if (event.target === itemCheckBox) {
+        return;
+      }
+      itemCheckBox.checked = !itemCheckBox.checked;
     });
-  }
-
-  if (dropdownItems) {
-    dropdownItems.forEach((dropdownItem) => {
-      dropdownItem.addEventListener('click', (event) => {
-        const item = event.currentTarget;
-        setSelectionPurpose(item.dataset.purpose);
-        turnOnSelectMode();
-      });
-    });
-  }
-
-  if (cancleButton) {
-    cancleButton.addEventListener('click', turnOffSelectMode);
-  }
-
-  if (completeButton) {
-    completeButton.addEventListener('click', completeSelectMode);
-  }
-
-  if (categories) {
-    categories.forEach((category) => {
-      category.addEventListener('click', (event) => {
-        const item = event.target.closest('.category__item');
-        if (item === null) {
-          event.stopPropagation();
-          return;
-        }
-        const { categoryIndex } = category.dataset;
-        const { itemIndex } = item.dataset;
-        changeCheckedForItem(categoryIndex, itemIndex);
-        const checkbox = item.querySelector('.item__checkbox');
-        if (event.target === checkbox) {
-          return;
-        }
-        checkbox.checked = !checkbox.checked;
-      });
-    });
-  }
+  });
 }
 
 function spreadItems(e) {
@@ -258,34 +243,76 @@ function stackItems(e) {
   });
 }
 
-const turnOnSelectMode = () => {
-  state.selectMode = true;
-  render();
-  setEvent();
-};
+function openUrl(url) {
+  if (state.selectMode) {
+    return;
+  }
+  chrome.tabs.create({ url });
+}
 
-const turnOffSelectMode = () => {
+function turnOnSelectModeWithPurpose(
+  event,
+  { footer, checkboxes, footerState }
+) {
+  const dropdownItem = event.target.closest('.dropdown-item__wrapper');
+  if (!dropdownItem) {
+    event.preventDefault();
+    return;
+  }
+  state.selectMode = true;
+  setSelectionPurpose(dropdownItem.dataset.purpose);
+  footerState.textContent = getFooterStateWithPurpose();
+  const categoryItems = state.scraps
+    .map((scrap) => scrap.items)
+    .reduce((prev, next) => [...prev, ...next], []);
+  categoryItems.forEach((categoryItem, index) => {
+    checkboxes[index].checked = categoryItem.checked;
+  });
+  showElements([footer, ...checkboxes]);
+}
+
+function getFooterStateWithPurpose() {
+  switch (state.selectionPurpose) {
+    case 'copy':
+      return '링크 복사';
+    case 'remove':
+      return '삭제하기';
+    case 'open':
+      return '모두 열기';
+    default:
+      return '';
+  }
+}
+
+function showElements(elements) {
+  elements.forEach((element) => element.classList.remove('d-none'));
+}
+
+function hideElements(elements) {
+  elements.forEach((element) => element.classList.add('d-none'));
+}
+
+const turnOffSelectMode = (visibleElements) => {
   state.selectMode = false;
   resetSelectionStates();
-  render();
-  setEvent();
+  hideElements(visibleElements);
 };
 
 const setSelectionPurpose = (purpose) => {
   state.selectionPurpose = purpose;
 };
 
-const completeSelectMode = () => {
+const completeSelectMode = (visibleElements) => {
   const selectedItems = state.scraps
     .map((scrap) => scrap.items.filter((item) => item.checked))
     .reduce((p, n) => [...p, ...n], []);
   handleSelectedItemsWithPurpose(selectedItems);
-  turnOffSelectMode();
+  turnOffSelectMode(visibleElements);
 };
 
 const handleSelectedItemsWithPurpose = (selectedItems) => {
   switch (state.selectionPurpose) {
-    case 'share':
+    case 'copy':
       navigator.clipboard.writeText(
         selectedItems.map((item) => item.url).join('\n')
       );
@@ -296,6 +323,7 @@ const handleSelectedItemsWithPurpose = (selectedItems) => {
         scrap.items = scrap.items.filter((item) => !itemIds.includes(item.id));
         return scrap;
       });
+      reRender();
       break;
     case 'open':
       selectedItems.forEach((selectedItem) => {
@@ -308,12 +336,11 @@ const handleSelectedItemsWithPurpose = (selectedItems) => {
 };
 
 const resetSelectionStates = () => {
-  delete state.selectionPurpose;
-  state.scraps = state.scraps.map((scrap) => {
+  setSelectionPurpose('');
+  state.scraps.forEach((scrap) => {
     scrap.items.forEach((item) => {
       item.checked = false;
     });
-    return scrap;
   });
 };
 
@@ -321,3 +348,8 @@ const changeCheckedForItem = (categoryIndex, itemIndex) => {
   const item = state.scraps[categoryIndex].items[itemIndex];
   state.scraps[categoryIndex].items[itemIndex].checked = !item.checked;
 };
+
+function reRender() {
+  render();
+  setEvent();
+}
