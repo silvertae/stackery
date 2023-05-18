@@ -121,12 +121,15 @@ function createFooterTemplate() {
 function createItemsTemplate(items, isSelectMode, categoryColor) {
   return items
     .map((item, index) => {
+      const faviconUrl = new URL('/favicon.ico', item.url).href;
       const visibility = index > 2 ? 'invisible' : '';
+
       return `
-        <div class="category__item border rounded d-flex justify-content-between align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
+        <div class="category__item border rounded d-flex align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
         data-url="${item.url}"
         data-item-index="${index}">
-          <p class="item__title mb-0">${item.title}</p>
+          <img class="favicon-img" src="${faviconUrl}" alt="favicon">
+          <p class="item__title mx-1 mb-0 flex-grow-1">${item.title}</p>
           ${getSelectBoxForItem(item.checked, isSelectMode)}
         </div>
         `;

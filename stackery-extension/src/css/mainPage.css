@@ -46,6 +46,11 @@
   transform: translateY(-80px);
 }
 
+.favicon-img {
+  width: 16px;
+  height: 16px;
+}
+
 footer {
   position: fixed;
   bottom: 0;
