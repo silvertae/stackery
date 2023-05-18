@@ -109,10 +109,10 @@ function createItemsTemplate(items, isSelectMode, categoryColor) {
     .map((item, index) => {
       const visibility = index > 2 ? 'invisible' : '';
       return `
-        <div class="category__item border rounded d-flex ${visibility}" style="background-color: ${categoryColor}" 
+        <div class="category__item border rounded d-flex justify-content-between align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
         data-url="${item.url}"
         data-item-index="${index}">
-          <p class="item__title">${item.title}</p>
+          <p class="item__title mb-0">${item.title}</p>
           ${getSelectBoxForItem(item.checked, isSelectMode)}
         </div>
         `;
@@ -122,7 +122,7 @@ function createItemsTemplate(items, isSelectMode, categoryColor) {
 
 function getSelectBoxForItem(checked, isSelectMode) {
   return isSelectMode
-    ? `<input class="item__checkbox form-check-input" type="checkbox" ${
+    ? `<input class="item__checkbox form-check-input mt-0" type="checkbox" ${
         checked ? 'checked' : ''
       } >`
     : '';
