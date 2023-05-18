@@ -13,14 +13,15 @@ function render() {
   const mainElement = document.querySelector('#main');
 
   const mainTemplate = `
-    <header class="main__header d-flex justify-content-end">
-      <button type="button" class="btn"><i class="bi bi-three-dots"></i></button>
-    </header>
-    <section class="main__body">
-      ${mainStore.categoryList
-        .map((category, idx) => makeCategory(category, idx))
-        .join('')}
-    </section>
+    <div>
+      <section class="scrap__body d-none">
+      </section>
+      <section class="main__body">
+        ${mainStore.categoryList
+          .map((category, idx) => makeCategory(category, idx))
+          .join('')}
+      </section>
+    </div>
   `;
 
   mainElement.innerHTML = mainTemplate;
