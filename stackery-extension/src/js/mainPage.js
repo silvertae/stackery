@@ -57,9 +57,9 @@ function makeCategory(category, idx) {
 
 function createFooterTemplate() {
   return `
-    <footer class="main__footer d-flex justify-content-between bg-primary-subtle d-none">
+    <footer class="main__footer d-flex justify-content-between align-items-center bg-primary-subtle d-none">
       <button type="button" class="main__cancle-button btn"><i class="bi bi-x-lg"></i></button>
-      <h3 class="main__footer--state"></h3>
+      <h4 class="main__footer--state mb-0"></h4>
       <button type="button" class="main__complete-button btn"><i class="bi bi-check-lg"></i></button>
     </footer>`;
 }
@@ -67,7 +67,7 @@ function createFooterTemplate() {
 function createItemsTemplate(items, categoryColor) {
   return items
     .map((item, index) => {
-      // const faviconUrl = new URL('/favicon.ico', item.url).href;
+      const faviconUrl = new URL('/favicon.ico', item.url).href;
       const visibility = index > 2 ? 'invisible' : '';
       const checked = item.checked ? 'checked' : '';
 
@@ -75,8 +75,9 @@ function createItemsTemplate(items, categoryColor) {
         <div class="category__item border rounded d-flex align-items-center px-2 ${visibility}" style="background-color: ${categoryColor}" 
         data-url="${item.url}"
         data-item-index="${index}">
-          <p class="item__title mx-1 mb-0 flex-grow-1">${item.title}</p>
-          <input class="item__checkbox form-check-input mt-0 d-none" type="checkbox" ${checked} />
+          <img class="favicon-img" src="${faviconUrl}" alt=""/>
+          <p class="item__title mx-1 mb-0 flex-grow-1 text-truncate">${item.title}</p>
+          <input class="item__checkbox form-check-input mt-0 flex-shrink-0 d-none" type="checkbox" ${checked} />
         </div>
         `;
     })
@@ -94,6 +95,7 @@ function setEvent() {
   const footer = document.querySelector('.main__footer');
   const footerState = document.querySelector('.main__footer--state');
   const checkboxes = document.querySelectorAll('.item__checkbox');
+  const faviconImgs = document.querySelectorAll('.favicon-img');
 
   categoryContainers.forEach((container) => {
     container.addEventListener('click', spreadItems);
@@ -137,6 +139,10 @@ function setEvent() {
       }
       itemCheckBox.checked = !itemCheckBox.checked;
     });
+  });
+
+  faviconImgs.forEach((img) => {
+    img.addEventListener('error', setDefaultFavicon);
   });
 }
 
@@ -193,6 +199,11 @@ function openUrl(url) {
     return;
   }
   chrome.tabs.create({ url });
+}
+
+function setDefaultFavicon() {
+  const defaultFaviconUrl = '/src/icons/stack_16.png';
+  this.src = defaultFaviconUrl;
 }
 
 function turnOnSelectModeWithPurpose(
