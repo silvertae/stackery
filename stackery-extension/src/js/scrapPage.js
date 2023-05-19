@@ -73,8 +73,8 @@ function validateForm() {
 
 function selectInputValue() {
   const scrapInput = document.querySelector('.input__title');
-  scrapInput.focus();
   scrapInput.setSelectionRange(0, scrapInput.value.length);
+  scrapInput.focus();
 }
 
 export async function initScrapPage() {
