@@ -30,10 +30,11 @@ async function writeTitle() {
   const h1Tags = await getH1();
   const url = await getTabUrl();
   const titleInput = document.querySelector('.input__title');
-  if (h1Tags === null) {
-    titleInput.value = url;
-  } else {
+
+  if (h1Tags) {
     titleInput.value = h1Tags.replace(/\s+/g, ' ').trim();
+  } else {
+    titleInput.value = url;
   }
 }
 
@@ -42,10 +43,10 @@ function saveScrapData() {
   saveBtn.addEventListener('click', async () => {
     const categoryInput = document.querySelector('.input__category');
     const categoryText = categoryInput.value;
-    const h1Tags = await getH1();
+    const scrapTitle = document.querySelector('.input__title');
     const scrapUrl = await getTabUrl();
     const scrapObj = {
-      title: h1Tags,
+      title: scrapTitle.value,
       url: scrapUrl,
       category: categoryText
     };
