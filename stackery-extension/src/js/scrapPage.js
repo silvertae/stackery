@@ -73,8 +73,15 @@ function validateForm() {
   });
 }
 
+function selectInputValue() {
+  const scrapInput = document.querySelector('.input__title');
+  scrapInput.focus();
+  scrapInput.setSelectionRange(0, scrapInput.value.length);
+}
+
 export async function initScrapPage() {
   await writeTitle();
   saveScrapData();
   validateForm();
+  selectInputValue();
 }
