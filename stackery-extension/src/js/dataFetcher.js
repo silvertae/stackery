@@ -1,10 +1,12 @@
+import { initPopup } from "./popup.js";
+
 export async function fetchAllData() {
   const scraps = await chrome.storage.local.get(null);
   return classifyByCategory(Object.values(scraps));
 }
 
 function classifyByCategory(items) {
-  return items.reduce((acc, item) => {
+  return items.reverse().reduce((acc, item) => {
     const existingCategory = acc.find((obj) => obj.title === item.category);
     if (existingCategory) {
       existingCategory.items.push(item);
@@ -21,7 +23,9 @@ export function saveData(obj) {
 
   const storageObj = {};
   storageObj[generatedId] = obj;
-  chrome.storage.local.set(storageObj);
+  chrome.storage.local.set(storageObj).then(() => {
+    initPopup();
+  });
 }
 
 function generateUniqueId() {
@@ -37,6 +41,5 @@ export async function findDataByUrl(url) {
 }
 
 export async function removeDataByIds(ids) {
-  console.log(ids);
   await chrome.storage.local.remove(ids);
 }

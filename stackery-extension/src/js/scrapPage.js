@@ -42,15 +42,13 @@ function saveScrapData() {
   const saveBtn = document.querySelector('.save__btn');
   saveBtn.addEventListener('click', async () => {
     const categoryInput = document.querySelector('.input__category');
-    const categoryText = categoryInput.value;
     const scrapTitle = document.querySelector('.input__title');
     const scrapUrl = await getTabUrl();
-    const scrapObj = {
-      title: scrapTitle.value,
+    saveData({
+      title: scrapTitle.value === '' ? scrapUrl : scrapTitle.value,
       url: scrapUrl,
-      category: categoryText
-    };
-    saveData(scrapObj);
+      category: categoryInput.value === '' ? '미분류' : categoryInput.value
+    });    
   });
 }
 
@@ -82,6 +80,5 @@ function selectInputValue() {
 export async function initScrapPage() {
   await writeTitle();
   saveScrapData();
-  validateForm();
   selectInputValue();
 }
