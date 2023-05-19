@@ -1,0 +1,52 @@
+#form {
+  width: 400px;
+  height: 200px;
+  position: relative;
+}
+.save__header__logo {
+  padding: 5px 0px 0px 15px;
+  font-weight: bold;
+  font-size: 15px;
+}
+.save__title {
+  font-weight: 700;
+  font-size: 13px;
+  width: 220px;
+  height: 30px;
+  display: flex;
+  margin-top: 15px;
+}
+.title__label {
+  height: 20px;
+  margin-right: 25px;
+  padding: 3px 0px 0px 20px;
+}
+.title__input {
+  font-size: 12px;
+  width: 190px;
+  height: 25px;
+  padding: none;
+  border: solid 1px;
+  border-radius: 10px;
+}
+.save__category {
+  font-weight: 700;
+  font-size: 13px;
+  width: 220px;
+  height: 30px;
+  display: flex;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.category__label {
+  height: 20px;
+  margin-right: 11px;
+}
+.category__input {
+  font-size: 12px;
+  width: 190px;
+  height: 25px;
+  padding: none;
+  border: solid 1px;
+  border-radius: 10px;
+}
